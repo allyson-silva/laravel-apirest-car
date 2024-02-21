@@ -45,9 +45,15 @@ class CarController extends Controller
 
     public function edit($id)
     {   
-        $car = $this->getCarOrFail($id);
+        $car = Car::find($id);
+        if($car == null){
+            return response()->json([
+                'message' => 'Car not found'
+            ], 404);
+        }
+    
         $car_category = CarCategory::whereNull('deleted_at')->get();
-        return response()->json(compact('car', 'car_category'));
+        return  response()->json(compact('car','car_category'));
     }
 
     public function index()
@@ -81,7 +87,13 @@ class CarController extends Controller
 
     public function show($id)
     {
-        return $this->getCarOrFail($id);
+        $car = Car::find($id);
+        if($car == null){
+            return response()->json([
+                'message' => 'Car not found'
+            ], 404);
+        }
+        return $car;
     }
 
     public function destroy(string $id)
